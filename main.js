@@ -185,7 +185,7 @@ class Box {
 class Ball {
 	constructor(args) {
 		Object.assign(this, args)
-		this.collides = {
+		this.collisionDebugColor = {
 			r: 0,
 			g: 0,
 			b: 0
@@ -253,7 +253,7 @@ class Ball {
 			false
 		)
 
-		ctx.fillStyle = makeFillStyle(this.collides)
+		ctx.fillStyle = makeFillStyle(this.collisionDebugColor)
 		ctx.fill()
 		ctx.closePath()
 	}
@@ -275,14 +275,14 @@ class Ball {
 
 	checkCollisions() {
 		let MULTIPLIER = 0.97
-		this.collides = {
-			r: this.collides.r * MULTIPLIER,
-			g: this.collides.g * MULTIPLIER,
-			b: this.collides.b * MULTIPLIER,
+		this.collisionDebugColor = {
+			r: this.collisionDebugColor.r * MULTIPLIER,
+			g: this.collisionDebugColor.g * MULTIPLIER,
+			b: this.collisionDebugColor.b * MULTIPLIER,
 		}
 		for (let box of boxes) {
 			if (collides(this, box)) {
-				this.collides = { r: 0, g: 1, b: 0 }
+				this.collisionDebugColor = { r: 0, g: 1, b: 0 }
 			}
 		}
 	}
