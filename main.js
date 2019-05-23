@@ -65,66 +65,6 @@ function overlaps(range1, range2) {
 	}
 }
 
-function collide(ball, box) {
-	let ballRanges = ball.ranges
-	let boxRanges = box.ranges
-
-	// Do the containing boxes overlap? This is always true when the ball and the box collide.
-	let containingBoxOverlap = false
-	if (
-		overlaps(ballRanges.x, boxRanges.x) &&
-		overlaps(ballRanges.y, boxRanges.y)
-	) {
-		containingBoxOverlap = true
-	}
-
-	// Does the ball overlap with one of the corners?
-	let cornerOverlap = false
-	for (let corner of box.corners) {
-		if (ball.contains(corner)) {
-			// The box pushes the ball into this direction
-			let forceDirection = minus2d(ball, corner)
-			// log('Force direction', forceDirection)
-			cornerOverlap = true
-		}
-	}
-
-	let sideOverlap = false
-	// Top?
-	if (distance1d(ball.y, box.top) < ball.radius) {
-		if (between(ball.x, box.left, box.right)) {
-			ball.velocity.y = -Math.abs(ball.velocity.y)
-			sideOverlap = true
-		}
-	}
-
-	// Bottom?
-	if (distance1d(ball.y, box.bottom) < ball.radius) {
-		if (between(ball.x, box.left, box.right)) {
-			ball.velocity.y = Math.abs(ball.velocity.y)
-			sideOverlap = true
-		}
-	}
-
-	// Left?
-	if (distance1d(ball.x, box.left) < ball.radius) {
-		if (between(ball.y, box.top, box.bottom)) {
-			ball.velocity.x = -Math.abs(ball.velocity.x)
-			sideOverlap = true
-		}
-	}
-
-	// Right?
-	if (distance1d(ball.x, box.right) < ball.radius) {
-		if (between(ball.y, box.top, box.bottom)) {
-			ball.velocity.x = Math.abs(ball.velocity.x)
-			sideOverlap = true
-		}
-	}
-
-	return sideOverlap || cornerOverlap
-}
-
 let boxes = []
 let balls = []
 
@@ -261,31 +201,93 @@ class Ball {
 	checkWallCollisions() {
 		if (this.x - this.radius < 0) {
 			this.velocity.x = Math.abs(this.velocity.x)
+			this.collisionDebugColor.b = 1
 		}
 		if (this.x + this.radius > WORLD_WIDTH) {
 			this.velocity.x = -Math.abs(this.velocity.x)
+			this.collisionDebugColor.b = 1
 		}
 		if (this.y - this.radius < 0) {
 			this.velocity.y = Math.abs(this.velocity.y)
+			this.collisionDebugColor.b = 1
 		}
 		if (this.y + this.radius > WORLD_HEIGHT) {
 			this.velocity.y = -Math.abs(this.velocity.y)
+			this.collisionDebugColor.b = 1
 		}
 	}
 
 	checkCollisions() {
-		let MULTIPLIER = 0.97
+		let MULTIPLIER = 0.985
 		this.collisionDebugColor = {
 			r: this.collisionDebugColor.r * MULTIPLIER,
 			g: this.collisionDebugColor.g * MULTIPLIER,
 			b: this.collisionDebugColor.b * MULTIPLIER,
 		}
 		for (let box of boxes) {
-			if (collide(this, box)) {
-				this.collisionDebugColor = { r: 0, g: 1, b: 0 }
+			this.collide(box)
+		}
+	}
+
+	collide(box) {
+		let ballRanges = this.ranges
+		let boxRanges = box.ranges
+
+		// Do the containing boxes overlap? This is always true when the ball and the box collide.
+		let containingBoxOverlap = false
+		if (
+			overlaps(ballRanges.x, boxRanges.x) &&
+			overlaps(ballRanges.y, boxRanges.y)
+		) {
+			containingBoxOverlap = true
+		}
+
+		// Does the ball overlap with one of the corners?
+		let cornerOverlap = false
+		for (let corner of box.corners) {
+			if (this.contains(corner)) {
+				// The box pushes the ball into this direction
+				let forceDirection = minus2d(this, corner)
+				// log('Force direction', forceDirection)
+				this.collisionDebugColor.r = 1
+				cornerOverlap = true
+			}
+		}
+
+		let sideOverlap = false
+		// Top?
+		if (distance1d(this.y, box.top) < this.radius) {
+			if (between(this.x, box.left, box.right)) {
+				this.velocity.y = -Math.abs(this.velocity.y)
+				this.collisionDebugColor.g = 1
+			}
+		}
+
+		// Bottom?
+		if (distance1d(this.y, box.bottom) < this.radius) {
+			if (between(this.x, box.left, box.right)) {
+				this.velocity.y = Math.abs(this.velocity.y)
+				this.collisionDebugColor.g = 1
+			}
+		}
+
+		// Left?
+		if (distance1d(this.x, box.left) < this.radius) {
+			if (between(this.y, box.top, box.bottom)) {
+				this.velocity.x = -Math.abs(this.velocity.x)
+				this.collisionDebugColor.g = 1
+			}
+		}
+
+		// Right?
+		if (distance1d(this.x, box.right) < this.radius) {
+			if (between(this.y, box.top, box.bottom)) {
+				this.velocity.x = Math.abs(this.velocity.x)
+				this.collisionDebugColor.g = 1
 			}
 		}
 	}
+
 }
 
 // x: 0..15
