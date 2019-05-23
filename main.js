@@ -36,13 +36,24 @@ function collides(ball, box) {
 	let ballRanges = ball.ranges
 	let boxRanges = box.ranges
 
+	// Do the containing boxes overlap? This is always true when the ball and the box collide.
+	let containingBoxOverlap = false
 	if (
 		overlaps(ballRanges.x, boxRanges.x) &&
 		overlaps(ballRanges.y, boxRanges.y)
 	) {
-		return true
+		containingBoxOverlap = true
 	}
 
+	// Does the ball overlap with one of the corners?
+	let cornerOverlap = false
+	for (let corner of box.corners) {
+		if (ball.contains(corner)) {
+			cornerOverlap = true
+		}
+	}
+
+	// TODO
 	return false
 }
 
