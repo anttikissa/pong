@@ -15,14 +15,18 @@ let WORLD_HEIGHT = 9
 let SCALE = width / WORLD_WIDTH
 let ctx = canvas.getContext('2d')
 
-// math halpers
+// in seconds (let's just assume this)
+let FRAME_LENGTH = 1 / 60
+
+// basic math
 let square = x => x * x
-let distance = (p1, p2) => Math.sqrt(square(p2.x - p1.x) + square(p2.y - p1.y))
 let distance1d = (a, b) => Math.abs(a - b)
 let between = (value, min, max) => min < value && value < max
 
-// in seconds (let's just assume this)
-let FRAME_LENGTH = 1 / 60
+// vector operations
+let minus2d = (p1, p2) => ({ x: p1.x - p2.x, y: p1.y - p2.y })
+let distance = (p1, p2) => Math.sqrt(square(p1.x - p2.x) + square(p1.y - p2.y))
+
 
 function update() {
 	for (let ball of balls) {
@@ -59,7 +63,9 @@ function collides(ball, box) {
 	let cornerOverlap = false
 	for (let corner of box.corners) {
 		if (ball.contains(corner)) {
-			// TODO do something about the direction
+			// The box pushes the ball into this direction
+			let forceDirection = minus2d(ball, corner)
+			log('Force direction', forceDirection)
 			cornerOverlap = true
 		}
 	}
@@ -282,7 +288,6 @@ newBall(4.0, 4.8, { x: 0.9, y: -0.05 })
 newBall(6.0, 4.0, { x: 0.09, y: 0.95 })
 
 newBall(6.4, 5.5, { x: -0.5, y: -0.025 }, 0.2)
-
 newBall(5.4, 4.5, { x: -0.0, y: 0.5 }, 0.2)
 
 newBall(4, 4.5, 0, 0.1)
