@@ -116,6 +116,49 @@ class Ball {
 			containingBoxOverlap = true
 		}
 
+		let sideOverlap = false
+		// Top?
+		if (distance1d(this.y, box.top) < this.radius) {
+			if (between(this.x, box.left, box.right)) {
+				this.velocity.y = -Math.abs(this.velocity.y)
+				this.collisionDebugColor.g = 1
+				sideOverlap = true
+			}
+		}
+
+		// Bottom?
+		if (distance1d(this.y, box.bottom) < this.radius) {
+			if (between(this.x, box.left, box.right)) {
+				this.velocity.y = Math.abs(this.velocity.y)
+				this.collisionDebugColor.g = 1
+				sideOverlap = true
+			}
+		}
+
+		// Left?
+		if (distance1d(this.x, box.left) < this.radius) {
+			if (between(this.y, box.top, box.bottom)) {
+				this.velocity.x = -Math.abs(this.velocity.x)
+				this.collisionDebugColor.g = 1
+				sideOverlap = true
+			}
+		}
+
+		// Right?
+		if (distance1d(this.x, box.right) < this.radius) {
+			if (between(this.y, box.top, box.bottom)) {
+				this.velocity.x = Math.abs(this.velocity.x)
+				this.collisionDebugColor.g = 1
+				sideOverlap = true
+			}
+		}
+
+		// To prevent the case of both side overlap and corner overlap from happening,
+		// exit early here. sideOverlap, which was already handled, takes precedence.
+		if (sideOverlap) {
+			return
+		}
+
 		// Does the ball overlap with one of the corners?
 		let cornerOverlap = false
 		for (let corner of box.corners) {
@@ -130,8 +173,8 @@ class Ball {
 					return
 				}
 
-                // We reverse the ball's velocity to that direction (speed, hopefully, should
-                // stay the same)
+				// We reverse the ball's velocity to that direction (speed, hopefully, should
+				// stay the same)
 				this.velocity = minus2d(
 					this.velocity,
 					mul2d(2, projection(this.velocity, forceDirection))
@@ -140,39 +183,6 @@ class Ball {
 				// log('Force direction', forceDirection)
 				this.collisionDebugColor.r = 1
 				cornerOverlap = true
-			}
-		}
-
-		let sideOverlap = false
-		// Top?
-		if (distance1d(this.y, box.top) < this.radius) {
-			if (between(this.x, box.left, box.right)) {
-				this.velocity.y = -Math.abs(this.velocity.y)
-				this.collisionDebugColor.g = 1
-			}
-		}
-
-		// Bottom?
-		if (distance1d(this.y, box.bottom) < this.radius) {
-			if (between(this.x, box.left, box.right)) {
-				this.velocity.y = Math.abs(this.velocity.y)
-				this.collisionDebugColor.g = 1
-			}
-		}
-
-		// Left?
-		if (distance1d(this.x, box.left) < this.radius) {
-			if (between(this.y, box.top, box.bottom)) {
-				this.velocity.x = -Math.abs(this.velocity.x)
-				this.collisionDebugColor.g = 1
-			}
-		}
-
-		// Right?
-		if (distance1d(this.x, box.right) < this.radius) {
-			if (between(this.y, box.top, box.bottom)) {
-				this.velocity.x = Math.abs(this.velocity.x)
-				this.collisionDebugColor.g = 1
 			}
 		}
 	}

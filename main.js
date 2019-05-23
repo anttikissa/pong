@@ -66,11 +66,6 @@ function loop() {
 	requestAnimationFrame(loop)
 }
 
-newBox(1, 1)
-newBox(2, 1)
-newBox(3, 1)
-newBox(4, 1)
-newBox(5, 5)
 
 newBall(6.4, 6.2, { x: -0.05, y: -0.025 })
 newBall(4.4, 6.0, { x: 0.5, y: 0.1 })
@@ -80,10 +75,21 @@ newBall(6.0, 4.0, { x: 0.09, y: 0.95 })
 newBall(6.4, 5.5, { x: -0.5, y: -0.025 }, 0.2)
 newBall(5.4, 4.5, { x: -0.0, y: 0.5 }, 0.2)
 
-newBall(4, 4.5, 0, 0.1)
-newBall(4, 4.5, 0, 0.1)
-newBall(4, 4.5, 0, 0.1)
-newBall(4, 4.5, 0, 0.1)
-newBall(4, 4.5, 0, 0.1)
+newBox(5, 5)
+
+function doBox(x) {
+	newBox(x, 1)
+	newBall(x * 0.99 + 0.13, 3, { x: 0, y: -1 }, 0.3)
+}
+
+for (let i = 0.75; i < 15; i += 1.5) {
+	doBox(i)
+}
+
+// newBall(4, 4.5, 0, 0.1)
+// newBall(4, 4.5, 0, 0.1)
+// newBall(4, 4.5, 0, 0.1)
+// newBall(4, 4.5, 0, 0.1)
+// newBall(4, 4.5, 0, 0.1)
 
 loop()
