@@ -185,7 +185,11 @@ class Box {
 class Ball {
 	constructor(args) {
 		Object.assign(this, args)
-		this.overlaps = false
+		this.collides = {
+			r: 0,
+			g: 0,
+			b: 0
+		}
 
 		if (!this.x) {
 			this.x = Math.random() * WORLD_WIDTH
@@ -270,7 +274,12 @@ class Ball {
 	}
 
 	checkCollisions() {
-		this.collides = { r: 0, g: 0, b: 0 }
+		let MULTIPLIER = 0.97
+		this.collides = {
+			r: this.collides.r * MULTIPLIER,
+			g: this.collides.g * MULTIPLIER,
+			b: this.collides.b * MULTIPLIER,
+		}
 		for (let box of boxes) {
 			if (collides(this, box)) {
 				this.collides = { r: 0, g: 1, b: 0 }
