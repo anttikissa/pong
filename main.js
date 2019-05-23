@@ -65,7 +65,7 @@ function overlaps(range1, range2) {
 	}
 }
 
-function collides(ball, box) {
+function collide(ball, box) {
 	let ballRanges = ball.ranges
 	let boxRanges = box.ranges
 
@@ -281,7 +281,7 @@ class Ball {
 			b: this.collisionDebugColor.b * MULTIPLIER,
 		}
 		for (let box of boxes) {
-			if (collides(this, box)) {
+			if (collide(this, box)) {
 				this.collisionDebugColor = { r: 0, g: 1, b: 0 }
 			}
 		}
