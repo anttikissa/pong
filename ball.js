@@ -20,8 +20,6 @@ class Ball {
 				y: Math.random() * 20 - 10
 			}
 		}
-
-
 	}
 
 	get ranges() {
@@ -98,7 +96,7 @@ class Ball {
 		this.collisionDebugColor = {
 			r: this.collisionDebugColor.r * MULTIPLIER,
 			g: this.collisionDebugColor.g * MULTIPLIER,
-			b: this.collisionDebugColor.b * MULTIPLIER,
+			b: this.collisionDebugColor.b * MULTIPLIER
 		}
 		for (let box of boxes) {
 			this.collide(box)
@@ -122,8 +120,23 @@ class Ball {
 		let cornerOverlap = false
 		for (let corner of box.corners) {
 			if (this.contains(corner)) {
-				// The box pushes the ball into this direction
+				// The box pushes the ball into this direction (towards its midpoint)
 				let forceDirection = minus2d(this, corner)
+				if (length(forceDirection) === 0) {
+					// Force majeure, wait for the next frame to avoid division by zero
+					log(
+						'Length of a vector was zero where it should not have been. Sorry.'
+					)
+					return
+				}
+
+                // We reverse the ball's velocity to that direction (speed, hopefully, should
+                // stay the same)
+				this.velocity = minus2d(
+					this.velocity,
+					mul2d(2, projection(this.velocity, forceDirection))
+				)
+
 				// log('Force direction', forceDirection)
 				this.collisionDebugColor.r = 1
 				cornerOverlap = true

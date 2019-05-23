@@ -12,3 +12,20 @@ function makeFillStyle(rgb) {
 	let { r, g, b } = rgb
 	return '#' + hexify(r) + hexify(g) + hexify(b)
 }
+
+function log(...args) {
+	console.log(...args)
+}
+
+function assert(fact) {
+    if (!fact) {
+        log('Assertion is about to fail. Hope you had a debugger open!')
+        debugger
+        throw new Error('assertion failed')
+    }
+}
+
+function equals(a, b) {
+    // Close enough
+    return JSON.stringify(a) === JSON.stringify(b)
+}

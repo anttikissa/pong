@@ -18,6 +18,20 @@ function normalize(v) {
 	return mul2d(1 / len, v)
 }
 
+function dotProduct(a, b) {
+    return a.x * b.x + a.y * b.y
+}
+
+// projection of a in the direction of b
+function projection(a, b) {
+    let bLength = length(b)
+    return mul2d(dotProduct(a, b) / bLength, normalize(b))
+}
+
+assert(equals(projection({ x: 3, y: 4 }, { x: 5, y: 0 }), { x: 3, y: 0 }))
+assert(equals(projection({ x: 3, y: 4 }, { x: 1, y: 0 }), { x: 3, y: 0 }))
+assert(equals(projection({ x: 3, y: 4 }, { x: 0, y: 1.5 }), { x: 0, y: 4 }))
+
 function overlaps(range1, range2) {
 	if (range1.min < range2.min) {
 		return range1.max > range2.min
@@ -25,3 +39,5 @@ function overlaps(range1, range2) {
 		return range2.max > range1.min
 	}
 }
+
+assert(equals(normalize({ x: 2, y: 0 }), { x: 1, y: 0 }))

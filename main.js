@@ -1,6 +1,3 @@
-function log(...args) {
-	console.log(...args)
-}
 
 let canvas = document.querySelector('#content')
 let ctx = canvas.getContext('2d')
