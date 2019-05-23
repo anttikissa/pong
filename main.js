@@ -52,6 +52,16 @@ class Box {
 			}
 		}
 	}
+
+	draw() {
+		ctx.fillStyle = 'white'
+		ctx.fillRect(
+			this.x * SCALE,
+			this.y * SCALE,
+			this.width * SCALE,
+			this.width * SCALE
+		)
+	}
 }
 
 class Ball {
@@ -71,6 +81,22 @@ class Ball {
 				max: this.y + this.radius
 			}
 		}
+	}
+
+	draw() {
+		ctx.beginPath()
+		ctx.arc(
+			this.x * SCALE,
+			this.y * SCALE,
+			this.radius * SCALE,
+			0,
+			2 * Math.PI,
+			false
+		)
+
+		ctx.fillStyle = this.overlaps ? 'red' : 'white'
+		ctx.fill()
+		ctx.closePath()
 	}
 }
 
@@ -102,29 +128,11 @@ function draw() {
 	ctx.clearRect(0, 0, width, height)
 
 	for (let box of boxes) {
-		ctx.fillStyle = 'white'
-		ctx.fillRect(
-			box.x * SCALE,
-			box.y * SCALE,
-			box.width * SCALE,
-			box.width * SCALE
-		)
+		box.draw()
 	}
 
 	for (let ball of balls) {
-		ctx.beginPath()
-		ctx.arc(
-			ball.x * SCALE,
-			ball.y * SCALE,
-			ball.radius * SCALE,
-			0,
-			2 * Math.PI,
-			false
-		)
-
-		ctx.fillStyle = ball.overlaps ? 'red' : 'white'
-		ctx.fill()
-		ctx.closePath()
+		ball.draw()
 	}
 }
 
