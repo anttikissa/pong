@@ -2,8 +2,40 @@
 <meta charset=utf-8>
 <title>Pong</title>
 
+<style>
+	* {
+		margin: 0;
+	}
+	body {
+		background: black;
+	}
+
+	#content {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%)
+	}
+
+	@media (max-height: 45vw) {
+		#content {
+			border: 1px solid #f0f;
+			width: 160vh;
+			height: 90vh;
+		}
+	}
+
+	@media (min-height: 45vw) {
+		#content {
+			border: 1px solid #888;
+			width: 80vw;
+			height: 45vw;
+		}
+	}
+</style>
+
 <body>
-	<canvas id=content>
+	<canvas width=1600 height=900 id=content>
 
 	<script src="main.js"></script>
 </body>
