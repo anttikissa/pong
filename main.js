@@ -37,6 +37,20 @@ function normalize(v) {
 	return mul2d(1 / len, v)
 }
 
+function makeFillStyle(rgb) {
+	// convert value between 0 and 1 to "00" -> "ff"
+	// if value is not between 0 and 1, you get garbage
+	function hexify(value) {
+		let n = Math.round(value * 255.0)
+		let s = n.toString(16).slice(0, 2)
+		if (s.length < 2) {
+			return '0' + s
+		}
+		return s
+	}
+	let { r, g, b } = rgb
+	return '#' + hexify(r) + hexify(g) + hexify(b)
+}
 function update() {
 	for (let ball of balls) {
 		ball.checkWallCollisions()
@@ -162,7 +176,7 @@ class Box {
 	}
 
 	draw() {
-		ctx.fillStyle = 'white'
+		ctx.fillStyle = 'black'
 		ctx.fillRect(
 			this.x * SCALE,
 			this.y * SCALE,
@@ -231,7 +245,7 @@ class Ball {
 			false
 		)
 
-		ctx.fillStyle = this.collides ? 'red' : 'white'
+		ctx.fillStyle = makeFillStyle(this.collides)
 		ctx.fill()
 		ctx.closePath()
 	}
@@ -252,10 +266,10 @@ class Ball {
 	}
 
 	checkCollisions() {
-		this.collides = false
+		this.collides = { r: 0, g: 0, b: 0 }
 		for (let box of boxes) {
 			if (collides(this, box)) {
-				this.collides = true
+				this.collides = { r: 0, g: 1, b: 0 }
 			}
 		}
 	}
