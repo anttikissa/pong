@@ -24,9 +24,18 @@ let distance1d = (a, b) => Math.abs(a - b)
 let between = (value, min, max) => min < value && value < max
 
 // vector operations
-let minus2d = (p1, p2) => ({ x: p1.x - p2.x, y: p1.y - p2.y })
-let distance = (p1, p2) => Math.sqrt(square(p1.x - p2.x) + square(p1.y - p2.y))
-
+let minus2d = (a, b) => ({ x: a.x - b.x, y: a.y - b.y })
+let mul2d = (scalar, v) => ({ x: scalar * v.x, y: scalar * v.y })
+let distance = (a, b) => Math.sqrt(square(a.x - b.x) + square(a.y - b.y))
+let length = v => Math.sqrt(square(v.x) + square(v.y))
+// returns null if vector length is zero
+function normalize(v) {
+	let len = length(v)
+	if (!len) {
+		return null
+	}
+	return mul2d(1 / len, v)
+}
 
 function update() {
 	for (let ball of balls) {
@@ -65,7 +74,7 @@ function collides(ball, box) {
 		if (ball.contains(corner)) {
 			// The box pushes the ball into this direction
 			let forceDirection = minus2d(ball, corner)
-			log('Force direction', forceDirection)
+			// log('Force direction', forceDirection)
 			cornerOverlap = true
 		}
 	}
@@ -167,6 +176,22 @@ class Ball {
 	constructor(args) {
 		Object.assign(this, args)
 		this.overlaps = false
+
+		if (!this.x) {
+			this.x = Math.random() * WORLD_WIDTH
+		}
+		if (!this.y) {
+			this.y = Math.random() * WORLD_HEIGHT
+		}
+
+		if (!this.velocity) {
+			this.velocity = {
+				x: Math.random() * 20 - 10,
+				y: Math.random() * 20 - 10
+			}
+		}
+	
+	
 	}
 
 	get ranges() {
@@ -184,6 +209,15 @@ class Ball {
 
 	contains(point) {
 		return distance(this, point) < this.radius
+	}
+
+	get speed() {
+		return length(this.velocity)
+	}
+
+	set speed(newSpeed) {
+		let direction = normalize(this.velocity) || { x: 1, y: 0 }
+		this.velocity = mul2d(newSpeed, direction)
 	}
 
 	draw() {
@@ -241,13 +275,6 @@ function newBox(x, y) {
 }
 
 function newBall(x, y, velocity, radius = 0.4) {
-	if (!velocity) {
-		velocity = {
-			x: Math.random() * 30 - 10,
-			y: Math.random() * 30 - 10
-		}
-	}
-
 	balls.push(
 		new Ball({
 			x,
