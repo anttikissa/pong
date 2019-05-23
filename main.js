@@ -53,11 +53,7 @@ function makeFillStyle(rgb) {
 }
 function update() {
 	for (let ball of balls) {
-		ball.checkWallCollisions()
-		ball.checkCollisions()
-
-		ball.x += ball.velocity.x * FRAME_LENGTH
-		ball.y += ball.velocity.y * FRAME_LENGTH
+		ball.update()
 	}
 }
 
@@ -204,8 +200,8 @@ class Ball {
 				y: Math.random() * 20 - 10
 			}
 		}
-	
-	
+
+
 	}
 
 	get ranges() {
@@ -232,6 +228,14 @@ class Ball {
 	set speed(newSpeed) {
 		let direction = normalize(this.velocity) || { x: 1, y: 0 }
 		this.velocity = mul2d(newSpeed, direction)
+	}
+
+	update() {
+		this.checkWallCollisions()
+		this.checkCollisions()
+
+		this.x += this.velocity.x * FRAME_LENGTH
+		this.y += this.velocity.y * FRAME_LENGTH
 	}
 
 	draw() {
