@@ -17,6 +17,8 @@ let FRAME_LENGTH = 1 / 60
 
 function update() {
 	for (let ball of balls) {
+		ball.checkCollisions()
+
 		ball.x += ball.velocity.x * FRAME_LENGTH
 		ball.y += ball.velocity.y * FRAME_LENGTH
 	}
@@ -24,13 +26,25 @@ function update() {
 
 function overlaps(range1, range2) {
 	if (range1.min < range2.min) {
-		return range1.max > range2.max
+		return range1.max > range2.min
 	} else {
-		return range2.max > range1.max
+		return range2.max > range1.min
 	}
 }
 
-function collides(ball, box) {}
+function collides(ball, box) {
+	let ballRanges = ball.ranges
+	let boxRanges = box.ranges
+
+	if (
+		overlaps(ballRanges.x, boxRanges.x) &&
+		overlaps(ballRanges.y, boxRanges.y)
+	) {
+		return true
+	}
+
+	return false
+}
 
 let boxes = []
 let balls = []
@@ -94,9 +108,18 @@ class Ball {
 			false
 		)
 
-		ctx.fillStyle = this.overlaps ? 'red' : 'white'
+		ctx.fillStyle = this.collides ? 'red' : 'white'
 		ctx.fill()
 		ctx.closePath()
+	}
+
+	checkCollisions() {
+		this.collides = false
+		for (let box of boxes) {
+			if (collides(this, box)) {
+				this.collides = true
+			}
+		}
 	}
 }
 
