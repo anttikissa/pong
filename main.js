@@ -178,7 +178,7 @@ function newBall(x, y, velocity) {
 		new Ball({
 			x,
 			y,
-			radius: 0.2,
+			radius: 0.4,
 			velocity
 		})
 	)
@@ -208,12 +208,12 @@ newBox(3, 1)
 newBox(4, 1)
 newBox(5, 5)
 
-newBall(7, 6.5, { x: -1, y: -0.5 })
+newBall(6.4, 6.2, { x: -.05, y: -0.025 })
 
-newBall(4, 4.5)
-newBall(4, 4.5)
-newBall(4, 4.5)
-newBall(4, 4.5)
-newBall(4, 4.5)
+// newBall(4, 4.5)
+// newBall(4, 4.5)
+// newBall(4, 4.5)
+// newBall(4, 4.5)
+// newBall(4, 4.5)
 
 loop()
