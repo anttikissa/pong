@@ -7,9 +7,12 @@ let canvas = document.querySelector('#content')
 // width: 1600, height: 900
 let { width, height } = canvas
 
+let WORLD_WIDTH = 16
+let WORLD_HEIGHT = 9
+
 // coords are x: 0.0-16.0, y: 0.0-9.0
 // multiple with SCALE to get canvas coordinates
-let SCALE = width / 16
+let SCALE = width / WORLD_WIDTH
 let ctx = canvas.getContext('2d')
 
 // in seconds (let's just assume this)
@@ -17,6 +20,7 @@ let FRAME_LENGTH = 1 / 60
 
 function update() {
 	for (let ball of balls) {
+		ball.checkWallCollisions()
 		ball.checkCollisions()
 
 		ball.x += ball.velocity.x * FRAME_LENGTH
@@ -46,15 +50,15 @@ function collides(ball, box) {
 	}
 
 	// Does the ball overlap with one of the corners?
-	let cornerOverlap = false
-	for (let corner of box.corners) {
-		if (ball.contains(corner)) {
-			cornerOverlap = true
-		}
-	}
+	// let cornerOverlap = false
+	// for (let corner of box.corners) {
+	// 	if (ball.contains(corner)) {
+	// 		cornerOverlap = true
+	// 	}
+	// }
 
 	// TODO
-	return false
+	return containingBoxOverlap
 }
 
 let boxes = []
@@ -124,6 +128,21 @@ class Ball {
 		ctx.closePath()
 	}
 
+	checkWallCollisions() {
+		if (this.x - this.radius < 0) {
+			this.velocity.x = Math.abs(this.velocity.x)
+		}
+		if (this.x + this.radius > WORLD_WIDTH) {
+			this.velocity.x = -Math.abs(this.velocity.x)
+		}
+		if (this.y - this.radius < 0) {
+			this.velocity.y = Math.abs(this.velocity.y)
+		}
+		if (this.y + this.radius > WORLD_HEIGHT) {
+			this.velocity.y = -Math.abs(this.velocity.y)
+		}
+	}
+
 	checkCollisions() {
 		this.collides = false
 		for (let box of boxes) {
@@ -148,6 +167,13 @@ function newBox(x, y) {
 }
 
 function newBall(x, y, velocity) {
+	if (!velocity) {
+		velocity = {
+			x: Math.random() * 20 - 10,
+			y: Math.random() * 20 - 10
+		}
+	}
+
 	balls.push(
 		new Ball({
 			x,
@@ -183,5 +209,11 @@ newBox(4, 1)
 newBox(5, 5)
 
 newBall(7, 6.5, { x: -1, y: -0.5 })
+
+newBall(4, 4.5)
+newBall(4, 4.5)
+newBall(4, 4.5)
+newBall(4, 4.5)
+newBall(4, 4.5)
 
 loop()
