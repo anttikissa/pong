@@ -12,9 +12,13 @@ let { width, height } = canvas
 let SCALE = width / 16
 let ctx = canvas.getContext("2d")
 
+// in seconds (let's just assume this)
+let FRAME_LENGTH = 1 / 60
+
 function update() {
-	for (let box of boxes) {
-		box.x += 0.01
+	for (let ball of balls) {
+		ball.x += ball.velocity.x * FRAME_LENGTH
+		ball.y += ball.velocity.y * FRAME_LENGTH
 	}
 }
 
@@ -32,18 +36,17 @@ function newBox(x, y) {
 	})
 }
 
-function newBall(x, y) {
+function newBall(x, y, velocity) {
 	balls.push({
 		x,
 		y,
-		radius: 0.5
+		radius: 0.2,
+		velocity
 	})
 }
 
 function draw() {
-	log("draw")
-
-	// ctx.clearRect(0, 0, width, height)
+	ctx.clearRect(0, 0, width, height)
 
 	for (let box of boxes) {
 		ctx.fillStyle = "white"
@@ -84,6 +87,6 @@ newBox(3, 1)
 newBox(4, 1)
 newBox(5, 5)
 
-newBall(8, 7)
+newBall(7, 6.5, { x: -1, y: -0.5 })
 
 loop()
