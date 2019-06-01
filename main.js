@@ -15,9 +15,9 @@ let SCALE = width / WORLD_WIDTH
 // in seconds (let's just assume this)
 let FRAME_LENGTH = 1 / 60
 
-function update() {
+function update(frames = 1) {
 	for (let ball of balls) {
-		ball.update()
+		ball.update(frames)
 	}
 }
 
@@ -48,21 +48,28 @@ function newBall(x, y, velocity, radius = 0.12) {
 	)
 }
 
-function draw() {
+function clear() {
 	ctx.clearRect(0, 0, width, height)
+}
 
+function drawBoxes() {
 	for (let box of boxes) {
 		box.draw()
 	}
-
+}
+function drawBalls(frames = 1) {
 	for (let ball of balls) {
-		ball.draw()
+		ball.draw(frames)
 	}
 }
 
 function loop() {
-	update()
-	draw()
+	clear()
+	for (let i = 0; i < 10; i++) {
+		update(0.1)
+	}
+	drawBoxes()
+	drawBalls(0.1)
 	requestAnimationFrame(loop)
 }
 

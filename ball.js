@@ -48,12 +48,12 @@ class Ball {
 		this.velocity = mul2d(newSpeed, direction)
 	}
 
-	update() {
+	update(frames = 1) {
 		this.checkWallCollisions()
 		this.checkCollisions()
 
-		this.x += this.velocity.x * FRAME_LENGTH
-		this.y += this.velocity.y * FRAME_LENGTH
+		this.x += this.velocity.x * FRAME_LENGTH * frames
+		this.y += this.velocity.y * FRAME_LENGTH * frames
 	}
 
 	draw() {
