@@ -65,14 +65,20 @@ function drawBalls(frames = 1) {
 
 function loop() {
 	clear()
-	for (let i = 0; i < 10; i++) {
-		update(0.1)
-	}
 	drawBoxes()
-	drawBalls(0.1)
+
+	// Simulate (and draw) this many frames per second
+	let MULTIPLIER = 10
+
+	for (let i = 0; i < MULTIPLIER; i++) {
+		update(1 / MULTIPLIER)
+		// Interesting way of drawing it 10 times per frame
+		drawBalls(1 / MULTIPLIER)
+	}
+	// The more cinematic way to draw
+	// drawBalls(1)
 	requestAnimationFrame(loop)
 }
-
 
 loop()
 

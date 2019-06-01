@@ -50,13 +50,13 @@ class Ball {
 
 	update(frames = 1) {
 		this.checkWallCollisions()
-		this.checkCollisions()
+		this.checkCollisions(frames)
 
 		this.x += this.velocity.x * FRAME_LENGTH * frames
 		this.y += this.velocity.y * FRAME_LENGTH * frames
 	}
 
-	draw() {
+	draw(frames) {
 		ctx.beginPath()
 		ctx.arc(
 			this.x * SCALE,
@@ -67,7 +67,7 @@ class Ball {
 			false
 		)
 
-		ctx.fillStyle = makeFillStyle(this.collisionDebugColor)
+		ctx.fillStyle = makeFillStyle(this.collisionDebugColor, frames)
 		ctx.fill()
 		ctx.closePath()
 	}
@@ -91,13 +91,14 @@ class Ball {
 		}
 	}
 
-	checkCollisions() {
-		let MULTIPLIER = 0.985
+	checkCollisions(frames) {
+		let MULTIPLIER = Math.pow(0.9, frames)
 		this.collisionDebugColor = {
 			r: this.collisionDebugColor.r * MULTIPLIER,
 			g: this.collisionDebugColor.g * MULTIPLIER,
 			b: this.collisionDebugColor.b * MULTIPLIER
 		}
+
 		for (let box of boxes) {
 			this.collide(box)
 		}

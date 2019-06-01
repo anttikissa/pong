@@ -1,7 +1,11 @@
 let first = true
-function makeFillStyle(rgb) {
+function makeFillStyle(rgb, opacity = 1) {
 	let { r, g, b } = rgb
-	return `rgb(${(r * 255) | 0}, ${(g * 255) | 0}, ${(b * 255) | 0})`
+	if (opacity === 1) {
+		return `rgb(${(r * 255) | 0}, ${(g * 255) | 0}, ${(b * 255) | 0})`
+	} else {
+		return `rgba(${(r * 255) | 0}, ${(g * 255) | 0}, ${(b * 255) | 0}, ${opacity})`
+	}
 }
 
 function log(...args) {
