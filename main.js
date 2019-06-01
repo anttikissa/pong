@@ -37,7 +37,7 @@ function newBox(x, y) {
 	)
 }
 
-function newBall(x, y, velocity, radius = 0.4) {
+function newBall(x, y, velocity, radius = 0.12) {
 	balls.push(
 		new Ball({
 			x,
@@ -67,29 +67,29 @@ function loop() {
 }
 
 
-newBall(6.4, 6.2, { x: -0.05, y: -0.025 })
-newBall(4.4, 6.0, { x: 0.5, y: 0.1 })
-newBall(4.0, 4.8, { x: 0.9, y: -0.05 })
-newBall(6.0, 4.0, { x: 0.09, y: 0.95 })
-
-newBall(6.4, 5.5, { x: -0.5, y: -0.025 }, 0.2)
-newBall(5.4, 4.5, { x: -0.0, y: 0.5 }, 0.2)
-
-newBox(5, 5)
-
-function doBox(x) {
-	newBox(x, 1)
-	newBall(x * 0.99 + 0.13, 3, { x: 0, y: -1 }, 0.3)
-}
-
-for (let i = 0.75; i < 15; i += 1.5) {
-	doBox(i)
-}
-
-// newBall(4, 4.5, 0, 0.1)
-// newBall(4, 4.5, 0, 0.1)
-// newBall(4, 4.5, 0, 0.1)
-// newBall(4, 4.5, 0, 0.1)
-// newBall(4, 4.5, 0, 0.1)
-
 loop()
+
+for (let i = 0; i < 100; i++) {
+	setTimeout(() => {
+		newBall(5, 8.8, { x: 6.5, y: -15 })
+	}, 30 * i)
+}
+
+for (let i = 0; i < 16; i++) {
+	for (let j = 0; j < 5; j++) {
+		if (j < 1) {
+			if (i % (j + 7)) {
+				continue;
+			}
+		}
+		if (j < 2) {
+			if (i % (j + 2)) {
+				continue;
+			}
+		}
+		if ((i + 1) % j) {
+			continue
+		}
+		newBox(i, j)
+	}
+}
