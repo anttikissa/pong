@@ -1,4 +1,15 @@
 
+let START_TIME = Date.now()
+let perf = function() {
+	return Date.now() - START_TIME
+}
+
+if (typeof performance !== 'undefined') {
+	perf = function() {
+		return performance.now()
+	}
+}
+
 let canvas = document.querySelector('#content')
 let ctx = canvas.getContext('2d')
 
@@ -48,8 +59,10 @@ function newBall(x, y, velocity, radius = 0.12) {
 	)
 }
 
+let DEBUG_HEIGHT = SCALE
+
 function clear() {
-	ctx.clearRect(0, 0, width, height)
+	ctx.clearRect(0, 0, width, height - DEBUG_HEIGHT)
 }
 
 function drawBoxes() {
@@ -63,20 +76,40 @@ function drawBalls(frames = 1) {
 	}
 }
 
+let frame = 0
+
 function loop() {
 	clear()
-	drawBoxes()
 
 	// Simulate (and draw) this many frames per second
 	let MULTIPLIER = 10
 
+	let debugUpdateStart = perf()
 	for (let i = 0; i < MULTIPLIER; i++) {
 		update(1 / MULTIPLIER)
 		// Interesting way of drawing it 10 times per frame
-		drawBalls(1 / MULTIPLIER)
+		// drawBalls(1 / MULTIPLIER)
 	}
-	// The more cinematic way to draw
-	// drawBalls(1)
+	let debugUpdateTime = perf() - debugUpdateStart
+
+	let debugDrawStart = perf()
+	drawBoxes()
+	drawBalls(1)
+	let debugDrawTime = perf() - debugDrawStart
+
+	// log('update', debugUpdateTime)
+	// log('draw', debugDrawTime)
+	let frameMs = FRAME_LENGTH * 1000
+	ctx.fillStyle = 'black'
+	ctx.fillRect(frame % width, height - SCALE, 1, SCALE)
+	ctx.fillStyle = 'rgba(255, 0, 0, 1)'
+	let updateH = SCALE * debugUpdateTime / frameMs
+	ctx.fillRect(frame % width, height - SCALE, 1, updateH)
+	ctx.fillStyle = 'rgba(0, 255, 255, 0.5)'
+	let drawH = SCALE * debugDrawTime / frameMs
+	ctx.fillRect(frame % width, height - drawH, 1, drawH)
+
+	frame++
 	requestAnimationFrame(loop)
 }
 
