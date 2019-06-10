@@ -115,7 +115,9 @@ function loop() {
 
 loop()
 
-for (let i = 0; i < 100; i++) {
+let ballCount = 50
+
+for (let i = 0; i < ballCount; i++) {
 	setTimeout(() => {
 		newBall(5, 8.8, { x: 6.5, y: -15 })
 	}, 30 * i)
